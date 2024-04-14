@@ -24,6 +24,19 @@ zeta-kotlin-vben 是一个基于vben的免费开源中后台模版。使用了�
 
 测试账号: zetaAdmin/admin
 
+## 业务
+
+| **功能** | **描述** | **进度** |
+|--------| -------- |--------|
+| 菜单管理   |          | 已完成    |
+| 用户管理   |          | 进行中    |
+| 角色管理   |          | 进行中    |
+| 操作日志   |          | 进行中    |
+| 登录日志   |          | 进行中    |
+| 数据字典   |          | 进行中    |
+| 岗位     |          | 进行中    |
+| 行政区划   |          | 进行中    |
+
 <p align="center">
     <img alt="VbenAdmin Logo" width="100%" src="https://anncwb.github.io/anncwb/images/preview1.png">
     <img alt="VbenAdmin Logo" width="100%" src="https://anncwb.github.io/anncwb/images/preview2.png">
