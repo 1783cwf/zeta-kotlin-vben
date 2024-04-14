@@ -1,6 +1,6 @@
-<div align="center"> <a href="https://github.com/anncwb/vue-vben-admin"> <img alt="VbenAdmin Logo" width="200" height="200" src="https://anncwb.github.io/anncwb/images/logo.png"> </a> <br> <br>
+<div align="center"> <a href="https://github.com/1783cwf/zeta-kotlin-vben.git"> <img alt="VbenAdmin Logo" width="200" height="200" src="https://anncwb.github.io/anncwb/images/logo.png"> </a> <br> <br>
 
-[![license](https://img.shields.io/github/license/anncwb/vue-vben-admin.svg)](LICENSE)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 <h1>zeta-kotlin-vben</h1>
 </div>
@@ -22,12 +22,7 @@ zeta-kotlin-vben 是一个基于vben的免费开源中后台模版。使用了�
 
 ## 预览
 
-- [vue-vben-admin](https://vben.vvbin.cn/) - 完整版中文站点
-- [vue-vben-admin-gh-pages](https://anncwb.github.io/vue-vben-admin/) - 完整版 github 站点
-- [vben-admin-thin-next](https://vben.vvbin.cn/thin/next/) - 简化版中文站点
-- [vben-admin-thin-gh-pages](https://anncwb.github.io/vben-admin-thin-next/) - 简化版 github 站点
-
-测试账号: admin/
+测试账号: zetaAdmin/admin
 
 <p align="center">
     <img alt="VbenAdmin Logo" width="100%" src="https://anncwb.github.io/anncwb/images/preview1.png">
@@ -35,15 +30,9 @@ zeta-kotlin-vben 是一个基于vben的免费开源中后台模版。使用了�
     <img alt="VbenAdmin Logo" width="100%" src="https://anncwb.github.io/anncwb/images/preview3.png">
 </p>
 
-### 使用 Gitpod
-
-在 Gitpod（适用于 GitHub 的免费在线开发环境）中打开项目，并立即开始编码.
-
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/anncwb/vue-vben-admin)
-
 ## 文档
 
-[文档地址](https://doc.vvbin.cn/)
+[文档地址](https://www.yuque.com/weifeng97/zv86gq?#%20%E3%80%8Azeta-kotlin-flex%E3%80%8B)
 
 ## 准备
 
@@ -61,7 +50,7 @@ zeta-kotlin-vben 是一个基于vben的免费开源中后台模版。使用了�
 - 获取项目代码
 
 ```bash
-git clone https://github.com/anncwb/vue-vben-admin.git
+git clone https://github.com/1783cwf/zeta-kotlin-vben.git
 ```
 
 - 安装依赖
