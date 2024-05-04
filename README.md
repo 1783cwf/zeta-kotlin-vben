@@ -5,7 +5,6 @@
 <h1>zeta-kotlin-vben</h1>
 </div>
 
-
 ## 简介
 
 zeta-kotlin-vben 是一个基于vben的免费开源中后台模版。使用了最新的`vue3`,`vite5`,`TypeScript`等主流技术开发，开箱即用的中后台前端解决方案，也可用于学习参考。
@@ -27,15 +26,15 @@ zeta-kotlin-vben 是一个基于vben的免费开源中后台模版。使用了�
 ## 业务
 
 | **功能** | **描述** | **进度** |
-|--------| -------- |--------|
-| 菜单管理   |          | 已完成    |
-| 用户管理   |          | 进行中    |
-| 角色管理   |          | 进行中    |
-| 操作日志   |          | 进行中    |
-| 登录日志   |          | 进行中    |
-| 数据字典   |          | 进行中    |
-| 岗位     |          | 进行中    |
-| 行政区划   |          | 进行中    |
+| -------- | -------- | -------- |
+| 菜单管理 |          | 已完成   |
+| 用户管理 |          | 进行中   |
+| 角色管理 |          | 进行中   |
+| 操作日志 |          | 进行中   |
+| 登录日志 |          | 进行中   |
+| 数据字典 |          | 进行中   |
+| 岗位     |          | 进行中   |
+| 行政区划 |          | 进行中   |
 
 <p align="center">
     <img alt="VbenAdmin Logo" width="100%" src="https://anncwb.github.io/anncwb/images/preview1.png">
@@ -155,7 +154,6 @@ docker run --name zeta-kotlin-vben -d -p 6666:80  -e VG_BASE_URL=http://localhos
 - [vite-plugin-svg-icons](https://github.com/anncwb/vite-plugin-svg-icons) - 用于快速生成 svg 雪碧图
 
 ## 感谢
-
 
 ## License
 

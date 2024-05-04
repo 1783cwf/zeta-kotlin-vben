@@ -5,6 +5,7 @@ import type {
   AxiosError,
   InternalAxiosRequestConfig,
 } from 'axios';
+
 import type { RequestOptions, UploadFileParams } from '#/axios';
 import type { CreateAxiosOptions } from './axiosTransform';
 import axios from 'axios';
@@ -13,7 +14,7 @@ import { AxiosCanceler } from './axiosCancel';
 import { isFunction } from '@/utils/is';
 import { cloneDeep } from 'lodash-es';
 import { ContentTypeEnum, RequestEnum } from '@/enums/httpEnum';
-import { ApiResult } from '@/types';
+import { ApiResult } from '#/base';
 import { message } from 'ant-design-vue';
 
 export * from './axiosTransform';

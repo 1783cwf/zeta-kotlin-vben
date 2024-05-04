@@ -21,7 +21,6 @@ export interface MultipleTabState {
 }
 
 function handleGotoPage(router: Router) {
-  console.log(router);
   const go = useGo(router);
   go(unref(router.currentRoute).fullPath, true);
 }
@@ -101,7 +100,6 @@ export const useMultipleTabStore = defineStore({
       this.clearCacheTabs();
     },
     goToPage(router: Router) {
-      console.log(router);
       const go = useGo(router);
       const len = this.tabList.length;
       const { path } = unref(router.currentRoute);
