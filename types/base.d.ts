@@ -19,9 +19,9 @@ export interface ApiResult<T> {
  */
 export interface PageResult<T> {
   /** 当前页数据 */
-  list?: T[];
+  records?: T[];
   /** 总数量 */
-  count?: string | number;
+  totalRow?: string | number;
 }
 
 /**
