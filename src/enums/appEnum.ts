@@ -50,3 +50,29 @@ export enum RouterTransitionEnum {
   FADE_BOTTOM = 'fade-bottom',
   FADE_SCALE = 'fade-scale',
 }
+
+export enum IconEnum {
+  EDIT = 'uil:edit',
+  SYNC = 'ic:baseline-sync',
+  DELETE = 'ic:outline-delete-outline',
+  IMPORT = 'bx:import',
+  EXPORT = 'bx:export',
+  RESET_PWD = 'fluent:key-reset-20-filled',
+  ADD = 'zondicons:add-outline',
+  EXPAND = 'ion:expand-outline',
+  COLLAPSE = 'octicon:sidebar-collapse-16',
+  REFRESH = 'charm:refresh',
+  DETAIL = 'icon-park-outline:view-grid-detail',
+  LOCK = 'icon-park-twotone:lock',
+  UNLOCK = 'icon-park-twotone:unlock',
+  DOWNLOAD = 'material-symbols:download',
+  // eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values
+  UPLOAD = 'zondicons:add-outline',
+  PREVIEW = 'codicon:preview',
+  PREV = 'iconoir:skip-prev',
+  NEXT = 'iconoir:skip-next',
+  CANCEL = 'mdi:cancel',
+  CLOSE = 'zondicons:close-outline',
+  PHONE = 'solar:phone-linear',
+  EMAIL = 'carbon:email',
+}
