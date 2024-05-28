@@ -58,7 +58,7 @@
         },
       },
       {
-        field: 'type',
+        field: 'menuType',
         dynamicDisabled: () => {
           return isUpdate.value;
         },
@@ -81,13 +81,14 @@
       {
         field: 'openType',
         dynamicDisabled: ({ values }) => {
-          return values.type === 'RESOURCE' || isUpdate.value;
+          console.log(values);
+          return values.menuType === 'RESOURCE' || isUpdate.value;
         },
       },
       {
         field: 'icon',
         dynamicReadonly: ({ values }) => {
-          return values.type === 'RESOURCE';
+          return values.menuType === 'RESOURCE';
         },
       },
     ]);

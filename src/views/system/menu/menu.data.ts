@@ -49,14 +49,14 @@ export const columns: BasicColumn[] = [
     },
   },
   {
-    key: 'type',
+    key: 'menuType',
     title: '类型',
     width: '100px',
     align: 'center',
     customRender({ record }) {
-      const type = record.type;
-      const color = type === 'MENU' ? 'green' : 'red';
-      const text = type === 'MENU' ? '菜单' : '按钮';
+      const menuType = record.menuType;
+      const color = menuType === 'MENU' ? 'green' : 'red';
+      const text = menuType === 'MENU' ? '菜单' : '按钮';
       return h(Tag, { color: color }, () => text);
     },
   },
@@ -66,8 +66,8 @@ export const columns: BasicColumn[] = [
     width: 180,
   },
 ];
-const isMenu = (type: string) => type === 'MENU';
-const isButton = (type: string) => type === '2';
+const isMenu = (menuType: string) => menuType === 'MENU';
+const isButton = (menuType: string) => menuType === 'RESOURCE';
 
 export const menuTypes = [
   { label: '菜单', value: 'MENU' },
@@ -94,17 +94,15 @@ export const formSchema: FormSchema[] = [
     field: 'parentId',
     label: '上级菜单',
     component: 'TreeSelect',
-    required: true,
     componentProps: {
       getPopupContainer: () => document.body,
     },
   },
   {
-    field: 'type',
+    field: 'menuType',
     label: '菜单类型',
     component: 'RadioButtonGroup',
     defaultValue: 'MENU',
-    required: true,
     componentProps: {
       options: [...menuTypes],
     },
@@ -133,9 +131,12 @@ export const formSchema: FormSchema[] = [
     field: 'name',
     label: '路由名称',
     component: 'Input',
+    required(renderCallbackParams) {
+      return renderCallbackParams.values.menuType === 'MENU';
+    },
     helpMessage: 'Vue Router的路由标识，需要唯一值。建议用英文命名',
     dynamicDisabled: ({ values }): boolean => {
-      return values.type === 'RESOURCE';
+      return values.menuType === 'RESOURCE';
     },
   },
   {
@@ -159,7 +160,7 @@ export const formSchema: FormSchema[] = [
     label: '图标',
     component: 'IconPicker',
     ifShow({ values }) {
-      return isMenu(values.type);
+      return isMenu(values.menuType);
     },
   },
   {
@@ -168,7 +169,7 @@ export const formSchema: FormSchema[] = [
     component: 'Input',
     helpMessage: '如果是子级路由，需要拼接父级路由;如果菜单类型是按钮，路由地址可以不用填写',
     dynamicDisabled: ({ values }): boolean => {
-      return !isMenu(values.type);
+      return !isMenu(values.menuType);
     },
   },
   {
@@ -177,7 +178,7 @@ export const formSchema: FormSchema[] = [
     component: 'Input',
     helpMessage: '如果新增的菜单是层级菜单，组件路径可以不用填写',
     dynamicDisabled: ({ values }): boolean => {
-      return !isMenu(values.type);
+      return !isMenu(values.menuType);
     },
   },
   {
@@ -186,7 +187,7 @@ export const formSchema: FormSchema[] = [
     component: 'Input',
     helpMessage: '影响面包屑点击之后，跳转到哪个路由地址',
     dynamicDisabled: ({ values }): boolean => {
-      return !isMenu(values.type);
+      return !isMenu(values.menuType);
     },
   },
   {
@@ -202,7 +203,7 @@ export const formSchema: FormSchema[] = [
     component: 'Input',
     helpMessage: `菜单类型为'菜单'时,权限标识不需要填写`,
     dynamicDisabled({ values }) {
-      return values.type === 'MENU';
+      return values.menuType === 'MENU';
     },
   },
   {
@@ -217,7 +218,7 @@ export const formSchema: FormSchema[] = [
         { label: '是', value: 'true' },
       ],
     },
-    dynamicDisabled: ({ values }) => !isMenu(values.type),
+    dynamicDisabled: ({ values }) => !isMenu(values.menuType),
   },
   {
     field: 'hide',
@@ -231,7 +232,7 @@ export const formSchema: FormSchema[] = [
         { label: '隐藏', value: true },
       ],
     },
-    ifShow: ({ values }) => !isButton(values.type),
+    ifShow: ({ values }) => !isButton(values.menuType),
   },
   {
     field: 'version',

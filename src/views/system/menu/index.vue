@@ -9,11 +9,11 @@
           <TableAction
             :actions="[
               {
-                icon: 'clarity:note-edit-line',
+                icon: IconEnum.EDIT,
                 onClick: handleEdit.bind(null, record!!),
               },
               {
-                icon: 'ant-design:delete-outlined',
+                icon: IconEnum.DELETE,
                 color: 'error',
                 popConfirm: {
                   title: '是否确认删除',
@@ -39,6 +39,7 @@
   import MenuDrawer from './MenuDrawer.vue';
 
   import { columns } from './menu.data';
+  import { IconEnum } from '@/enums/appEnum';
 
   defineOptions({ name: 'MenuManagement' });
 
