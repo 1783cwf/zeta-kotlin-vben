@@ -5,6 +5,7 @@
       multiple
       @change="handleChange"
       :action="uploadUrl"
+      :headers="headers"
       :showUploadList="false"
       accept=".jpg,.jpeg,.gif,.png,.webp"
     >
@@ -21,6 +22,8 @@
   import { useDesign } from '@/hooks/web/useDesign';
   import { useGlobSetting } from '@/hooks/setting';
   import { useI18n } from '@/hooks/web/useI18n';
+  import { getToken } from '@/utils/auth';
+  import { useMessage } from '@/hooks/web/useMessage';
 
   defineOptions({ name: 'TinymceImageUpload' });
 
@@ -38,7 +41,13 @@
 
   let uploading = false;
 
-  const { uploadUrl } = useGlobSetting();
+  const { apiUrl, clientId } = useGlobSetting();
+  const uploadUrl = `${apiUrl}/resource/oss/upload`;
+  // 使用upload组件只能这样上传
+  const headers = {
+    Authorization: 'Bearer ' + getToken(),
+    clientId,
+  };
   const { t } = useI18n();
   const { prefixCls } = useDesign('tinymce-img-upload');
 
@@ -49,10 +58,11 @@
     };
   });
 
+  const { createMessage } = useMessage();
   function handleChange(info: Record<string, any>) {
     const file = info.file;
     const status = file?.status;
-    const url = file?.response?.url;
+    // const url = file?.response?.data.url;
     const name = file?.name;
 
     if (status === 'uploading') {
@@ -61,7 +71,16 @@
         uploading = true;
       }
     } else if (status === 'done') {
-      emit('done', name, url);
+      // http 200会走到这里  需要再次判断
+      const { response } = file;
+      const { code, msg = '服务器错误', data } = response;
+      if (code === 200) {
+        const { url } = data;
+        emit('done', name, url);
+      } else {
+        createMessage.error(msg);
+      }
+      // emit('done', name, url);
       uploading = false;
     } else if (status === 'error') {
       emit('error');

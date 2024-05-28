@@ -52,6 +52,8 @@
   import 'tinymce/plugins/visualblocks';
   import 'tinymce/plugins/visualchars';
   import 'tinymce/plugins/wordcount';
+  import 'tinymce/plugins/image';
+  import 'tinymce/plugins/imagetools';
 
   import {
     computed,
@@ -150,6 +152,8 @@
       toolbar,
       menubar: 'file edit insert view format table',
       plugins,
+      // 允许粘贴图片 base64格式
+      paste_data_images: true,
       language_url: publicPath + 'resource/tinymce/langs/' + langName.value + '.js',
       language: langName.value,
       branding: false,
@@ -170,12 +174,12 @@
 
   const disabled = computed(() => {
     const { options } = props;
-    const getdDisabled = options && Reflect.get(options, 'readonly');
+    const getDisabled = options && Reflect.get(options, 'readonly');
     const editor = unref(editorRef);
     if (editor) {
-      editor.setMode(getdDisabled ? 'readonly' : 'design');
+      editor.setMode(getDisabled ? 'readonly' : 'design');
     }
-    return getdDisabled ?? false;
+    return getDisabled ?? false;
   });
 
   watch(
@@ -201,14 +205,14 @@
   });
 
   onBeforeUnmount(() => {
-    destory();
+    destroy();
   });
 
   onDeactivated(() => {
-    destory();
+    destroy();
   });
 
-  function destory() {
+  function destroy() {
     if (tinymce !== null) {
       tinymce?.remove?.(unref(initOptions).selector!);
     }

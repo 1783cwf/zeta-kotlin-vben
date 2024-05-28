@@ -35,15 +35,14 @@
   import { useI18n } from '@/hooks/web/useI18n';
   import { useUploadType } from '../hooks/useUpload';
   import { uploadContainerProps } from '../props';
-  import { checkFileType } from '../helper';
+  import { isImgTypeByName } from '../helper';
   import { UploadResultStatus } from '@/components/Upload/src/types/typing';
-  import { get, omit } from 'lodash-es';
 
   defineOptions({ name: 'ImageUpload' });
 
   const emit = defineEmits(['change', 'update:value', 'delete']);
   const props = defineProps({
-    ...omit(uploadContainerProps, ['previewColumns', 'beforePreviewData']),
+    ...uploadContainerProps,
   });
   const { t } = useI18n();
   const { createMessage } = useMessage();
@@ -70,8 +69,8 @@
         isInnerOperate.value = false;
         return;
       }
-      let value: string[] = [];
       if (v) {
+        let value: string[] = [];
         if (isArray(v)) {
           value = v;
         } else {
@@ -92,12 +91,6 @@
           }
         }) as UploadProps['fileList'];
       }
-      emit('update:value', value);
-      emit('change', value);
-    },
-    {
-      immediate: true,
-      deep: true,
     },
   );
 
@@ -128,7 +121,6 @@
       index !== -1 && fileList.value.splice(index, 1);
       const value = getValue();
       isInnerOperate.value = true;
-      emit('update:value', value);
       emit('change', value);
       emit('delete', file);
     }
@@ -141,7 +133,8 @@
 
   const beforeUpload = (file: File) => {
     const { maxSize, accept } = props;
-    const isAct = checkFileType(file, accept);
+    const { name } = file;
+    const isAct = isImgTypeByName(name);
     if (!isAct) {
       createMessage.error(t('component.upload.acceptUpload', [accept]));
       isActMsg.value = false;
@@ -159,29 +152,22 @@
   };
 
   async function customRequest(info: UploadRequestOption<any>) {
-    const { api, uploadParams = {}, name, filename, resultField } = props;
+    const { api } = props;
     if (!api || !isFunction(api)) {
       return warn('upload api must exist and be a function');
     }
     try {
-      const res = await api?.({
+      const res = await props.api?.({
         data: {
-          ...uploadParams,
+          ...(props.uploadParams || {}),
         },
         file: info.file,
-        name: name,
-        filename: filename,
+        name: props.name,
+        filename: props.filename,
       });
-      if (props.resultField) {
-        let result = get(res, resultField);
-        info.onSuccess!(result);
-      } else {
-        // 不传入 resultField 的情况
-        info.onSuccess!(res.data);
-      }
+      info.onSuccess!(res.data);
       const value = getValue();
       isInnerOperate.value = true;
-      emit('update:value', value);
       emit('change', value);
     } catch (e: any) {
       console.log(e);
@@ -193,12 +179,9 @@
     const list = (fileList.value || [])
       .filter((item) => item?.status === UploadResultStatus.DONE)
       .map((item: any) => {
-        if (item?.response && props?.resultField) {
-          return item?.response;
-        }
         return item?.url || item?.response?.url;
       });
-    return list;
+    return props.multiple ? list : list.length > 0 ? list[0] : '';
   }
 </script>
 

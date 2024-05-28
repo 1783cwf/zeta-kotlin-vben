@@ -124,6 +124,10 @@ interface _CustomComponents {
   InputCountDown: ExtractPropTypes<
     (typeof import('@/components/CountDown/src/CountdownInput.vue'))['default']
   >;
+  RichTextarea: ExtractPropTypes<(typeof import('@/components/Tinymce/src/Editor.vue'))['default']>;
+  ColorPicker: ExtractPropTypes<
+    (typeof import('@/components/ColorPicker/src/index.vue'))['default']
+  >;
 }
 
 type CustomComponents<T = _CustomComponents> = {
@@ -173,4 +177,6 @@ export interface ComponentProps {
   Transfer: ExtractPropTypes<(typeof import('ant-design-vue/es/transfer'))['default']>;
   CropperAvatar: CustomComponents['CropperAvatar'];
   BasicTitle: CustomComponents['BasicTitle'];
+  RichTextarea: CustomComponents['RichTextarea'];
+  ColorPicker: CustomComponents['ColorPicker'];
 }

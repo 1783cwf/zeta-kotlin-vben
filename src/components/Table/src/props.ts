@@ -17,7 +17,7 @@ import { propTypes } from '@/utils/propTypes';
 import type { Key } from 'ant-design-vue/lib/table/interface';
 
 export const basicProps = {
-  clickToRowSelect: { type: Boolean, default: true },
+  clickToRowSelect: { type: Boolean, default: false },
   isTreeTable: Boolean,
   tableSetting: propTypes.shape<TableSetting>({}),
   inset: Boolean,
@@ -29,9 +29,12 @@ export const basicProps = {
     type: Function as PropType<(data: Partial<Recordable<string[]>>) => any>,
     default: DEFAULT_FILTER_FN,
   },
-  showTableSetting: Boolean,
+  showTableSetting: {
+    type: Boolean,
+    default: true,
+  },
   autoCreateKey: { type: Boolean, default: true },
-  striped: { type: Boolean, default: true },
+  striped: { type: Boolean, default: false },
   showSummary: Boolean,
   summaryFunc: {
     type: [Function, Array] as PropType<(...arg: any[]) => any[]>,
@@ -101,7 +104,7 @@ export const basicProps = {
   ellipsis: { type: Boolean, default: true },
   isCanResizeParent: { type: Boolean, default: false },
   canResize: { type: Boolean, default: true },
-  clearSelectOnPageChange: propTypes.bool,
+  clearSelectOnPageChange: propTypes.bool.def(true),
   resizeHeightOffset: propTypes.number.def(0),
   rowSelection: {
     type: Object as PropType<TableRowSelection | null>,
@@ -124,7 +127,7 @@ export const basicProps = {
     type: [String, Function] as PropType<BasicTableProps['rowKey']>,
     default: '',
   },
-  bordered: propTypes.bool,
+  bordered: propTypes.bool.def(false),
   pagination: {
     type: [Object, Boolean] as PropType<PaginationProps | boolean>,
     default: null,

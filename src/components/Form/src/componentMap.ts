@@ -34,6 +34,8 @@ import { IconPicker } from '@/components/Icon';
 import { CountdownInput } from '@/components/CountDown';
 import { BasicTitle } from '@/components/Basic';
 import { CropperAvatar } from '@/components/Cropper';
+import { Tinymce } from '@/components/Tinymce';
+import { ColorPicker } from '@/components/ColorPicker';
 
 const componentMap = new Map<ComponentType | string, Component>();
 
@@ -78,6 +80,11 @@ componentMap.set('Divider', Divider);
 componentMap.set('CropperAvatar', CropperAvatar);
 
 componentMap.set('BasicTitle', BasicTitle);
+
+// 手动添加富文本
+componentMap.set('RichTextarea', Tinymce);
+// 添加颜色选择器 字典选择使用
+componentMap.set('ColorPicker', ColorPicker);
 
 export function add<T extends string, R extends Component>(
   compName: ComponentType | T,

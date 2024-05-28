@@ -27,6 +27,7 @@ export interface FormActionType {
   submit: () => Promise<void>;
   setFieldsValue: (values: Recordable) => Promise<void>;
   resetFields: () => Promise<void>;
+  resetForm: () => Promise<void>;
   getFieldsValue: () => Recordable;
   clearValidate: (name?: string | string[]) => Promise<void>;
   updateSchema: (data: Partial<FormSchemaInner> | Partial<FormSchemaInner>[]) => Promise<void>;
@@ -41,6 +42,7 @@ export interface FormActionType {
   validateFields: (nameList?: NamePath[]) => Promise<any>;
   validate: <T = Recordable>(nameList?: NamePath[] | false) => Promise<T>;
   scrollToField: (name: NamePath, options?: ScrollOptions) => Promise<void>;
+  resetDefaultField: (name?: NamePath[]) => void;
 }
 
 export type RegisterFn = (formInstance: FormActionType) => void;
@@ -166,8 +168,16 @@ interface BaseFormSchema<T extends ComponentType = any> {
   // Required
   required?: boolean | ((renderCallbackParams: RenderCallbackParams) => boolean);
 
-  suffix?: string | number | ((values: RenderCallbackParams) => string | number);
-
+  suffix?:
+    | string
+    | number
+    | VNode
+    | ((renderCallbackParams: RenderCallbackParams) => string | VNode | number);
+  prefix?:
+    | string
+    | number
+    | VNode
+    | ((renderCallbackParams: RenderCallbackParams) => string | VNode | number);
   // Validation rules
   rules?: Rule[];
   // Check whether the information is added to the label

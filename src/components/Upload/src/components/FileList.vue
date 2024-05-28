@@ -4,7 +4,6 @@
   import { useSortable } from '@/hooks/web/useSortable';
   import { useModalContext } from '@/components/Modal/src/hooks/useModalContext';
   import { defineComponent, CSSProperties, watch, nextTick, ref, onMounted } from 'vue';
-  import { FileBasicColumn } from '../types/typing';
 
   export default defineComponent({
     name: 'FileList',
@@ -52,11 +51,7 @@
 
       return () => {
         const { columns, actionColumn, dataSource } = props;
-        let columnList: FileBasicColumn[];
-        columnList = (
-          actionColumn ? [...columns, actionColumn] : [...columns]
-        ) as FileBasicColumn[];
-
+        const columnList = [...columns, actionColumn];
         return (
           // x scrollbar
           <div class="overflow-x-auto">
@@ -91,7 +86,7 @@
                         const { dataIndex = '', customRender, align = 'center' } = item;
                         const render = customRender && isFunction(customRender);
                         return (
-                          <td class={['file-table-td break-all', align]} key={dataIndex}>
+                          <td class={['file-table-td justify-center', align]} key={dataIndex}>
                             {render
                               ? customRender?.({ text: record[dataIndex], record })
                               : record[dataIndex]}
@@ -132,7 +127,7 @@
     }
 
     thead {
-      background-color: @background-color-light;
+      background-color: transparent;
     }
 
     table,

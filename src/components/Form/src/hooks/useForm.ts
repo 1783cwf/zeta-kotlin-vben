@@ -84,6 +84,13 @@ export function useForm(props?: Props): UseFormReturnType {
       });
     },
 
+    resetForm: async () => {
+      getForm().then(async (form) => {
+        await form.resetFields();
+        await form.clearValidate();
+      });
+    },
+
     removeSchemaByField: async (field: string | string[]) => {
       unref(formRef)?.removeSchemaByField(field);
     },
@@ -120,6 +127,9 @@ export function useForm(props?: Props): UseFormReturnType {
     validateFields: async (nameList?: NamePath[]): Promise<Recordable> => {
       const form = await getForm();
       return form.validateFields(nameList);
+    },
+    resetDefaultField: async (nameList?: NamePath[]) => {
+      unref(formRef)?.resetDefaultField(nameList);
     },
   };
 

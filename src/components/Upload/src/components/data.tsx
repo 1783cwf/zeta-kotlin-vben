@@ -80,7 +80,9 @@ export function createActionColumn(handleRemove: Function): FileBasicColumn {
       const actions: ActionItem[] = [
         {
           label: t('component.upload.del'),
+          ghost: true,
           color: 'error',
+          type: 'ghost',
           onClick: handleRemove.bind(null, record),
         },
       ];

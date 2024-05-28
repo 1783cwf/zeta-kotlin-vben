@@ -195,6 +195,7 @@
 
       function onStrictlyChange(strictly: boolean) {
         state.checkStrictly = strictly;
+        emit('update:checkStrictly', strictly);
       }
 
       watch(
@@ -432,11 +433,11 @@
       expose(instance);
 
       return () => {
-        const { title, helpMessage, toolbar, search, checkable } = props;
+        const { title, helpMessage, toolbar, search, checkable, enableCustomTool } = props;
         const showTitle = title || toolbar || search || slots.headerTitle;
         const scrollStyle: CSSProperties = { height: 'calc(100% - 38px)' };
         return (
-          <div class={[bem(), 'h-full', attrs.class]}>
+          <div class={[bem(), 'h-full', 'rounded-lg', attrs.class]}>
             {showTitle && (
               <TreeHeader
                 checkable={checkable}
@@ -446,9 +447,11 @@
                 search={search}
                 toolbar={toolbar}
                 helpMessage={helpMessage}
+                checkStrictly={state.checkStrictly}
                 onStrictlyChange={onStrictlyChange}
                 onSearch={handleSearch}
                 searchText={searchState.searchText}
+                enableCustomTool={enableCustomTool}
               >
                 {extendSlots(slots)}
               </TreeHeader>

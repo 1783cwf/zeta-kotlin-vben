@@ -25,7 +25,12 @@
     </template>
 
     <div class="upload-modal-toolbar">
-      <Alert :message="getHelpText" type="info" banner class="upload-modal-toolbar__text" />
+      <Alert
+        :message="getHelpText"
+        type="info"
+        banner
+        class="rounded-md upload-modal-toolbar__text"
+      />
 
       <Upload
         :accept="getStringAccept"
@@ -66,7 +71,6 @@
   import { warn } from '@/utils/log';
   import FileList from './FileList.vue';
   import { useI18n } from '@/hooks/web/useI18n';
-  import { get } from 'lodash-es';
 
   const props = defineProps({
     ...basicProps,
@@ -164,9 +168,6 @@
   function handleRemove(record: FileItem) {
     const index = fileListRef.value.findIndex((item) => item.uuid === record.uuid);
     index !== -1 && fileListRef.value.splice(index, 1);
-    isUploadingRef.value = fileListRef.value.some(
-      (item) => item.status === UploadResultStatus.UPLOADING,
-    );
     emit('delete', record);
   }
 
@@ -191,17 +192,9 @@
           item.percent = complete;
         },
       );
-      const { data } = ret;
       item.status = UploadResultStatus.SUCCESS;
-      item.response = data;
-      if (props.resultField) {
-        // 适配预览组件而进行封装
-        item.response = {
-          code: 0,
-          message: 'upload Success!',
-          url: get(ret, props.resultField),
-        };
-      }
+      // ret 为 code msg data中的data
+      item.response = ret;
       return {
         success: true,
         error: null,
@@ -217,28 +210,58 @@
   }
 
   // 点击开始上传
+  // async function handleStartUpload() {
+  //   const { maxNumber } = props;
+  //   if (fileListRef.value.length + props.previewFileList?.length > maxNumber) {
+  //     return createMessage.warning(t('component.upload.maxNumber', [maxNumber]));
+  //   }
+  //   try {
+  //     isUploadingRef.value = true;
+  //     // 只上传不是成功状态的
+  //     const uploadFileList =
+  //       fileListRef.value.filter((item) => item.status !== UploadResultStatus.SUCCESS) || [];
+  //     const data = await Promise.all(
+  //       uploadFileList.map((item) => {
+  //         return uploadApiByItem(item);
+  //       }),
+  //     );
+  //     isUploadingRef.value = false;
+  //     // 生产环境:抛出错误
+  //     const errorList = data.filter((item: any) => !item.success);
+  //     if (errorList.length > 0) throw errorList;
+  //   } catch (e) {
+  //     isUploadingRef.value = false;
+  //     throw e;
+  //   }
+  // }
+
+  // 点击开始上传
   async function handleStartUpload() {
     const { maxNumber } = props;
-    if (fileListRef.value.length + props.previewFileList.length > maxNumber) {
+    const allFileList = [...fileListRef.value, ...(props.previewFileList || [])];
+
+    if (allFileList.length > maxNumber) {
       return createMessage.warning(t('component.upload.maxNumber', [maxNumber]));
     }
+
     try {
       isUploadingRef.value = true;
-      // 只上传不是成功状态的
-      const uploadFileList =
-        fileListRef.value.filter((item) => item.status !== UploadResultStatus.SUCCESS) || [];
-      const data = await Promise.all(
-        uploadFileList.map((item) => {
-          return uploadApiByItem(item);
-        }),
+
+      // 只上传不是成功状态的文件
+      const uploadFileList = allFileList.filter(
+        (item) => (item as any).status !== UploadResultStatus.SUCCESS,
       );
-      isUploadingRef.value = false;
-      // 生产环境:抛出错误
-      const errorList = data.filter((item: any) => !item.success);
-      if (errorList.length > 0) throw errorList;
+
+      for (const item of uploadFileList) {
+        const result = await uploadApiByItem(item);
+        if (!result?.success) {
+          throw result?.error; // 如果有错误，直接抛出
+        }
+      }
     } catch (e) {
+      console.error(e); // 打印错误
+    } finally {
       isUploadingRef.value = false;
-      throw e;
     }
   }
 

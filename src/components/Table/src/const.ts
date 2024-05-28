@@ -9,6 +9,7 @@ const {
   defaultSize,
   defaultSortFn,
   defaultFilterFn,
+  formConfig,
 } = table;
 
 export const ROW_KEY = 'key';
@@ -36,3 +37,6 @@ export const DEFAULT_ALIGN = 'center';
 export const INDEX_COLUMN_FLAG = 'INDEX';
 
 export const ACTION_COLUMN_FLAG = 'ACTION';
+
+// 默认的表格form样式
+export const DEFAULT_FORM_CONFIG = formConfig;

@@ -1,45 +1,68 @@
 <template>
-  <div :class="bem()" class="flex mb-1 px-2 py-1.5 items-center">
-    <slot name="headerTitle" v-if="slots.headerTitle"></slot>
-    <BasicTitle :helpMessage="helpMessage" v-if="!slots.headerTitle && title">
-      {{ title }}
-    </BasicTitle>
-    <div
-      class="flex items-center flex-1 cursor-pointer justify-self-stretch"
-      v-if="search || toolbar"
-    >
-      <div :class="getInputSearchCls" v-if="search">
-        <InputSearch
-          :placeholder="t('common.searchText')"
-          size="small"
-          allowClear
-          v-model:value="searchValue"
-        />
+  <div class="flex flex-col rounded-lg">
+    <div :class="bem()" class="flex mb-1 px-2 py-1.5 items-center">
+      <slot name="headerTitle" v-if="slots.headerTitle"></slot>
+      <BasicTitle :helpMessage="helpMessage" v-if="!slots.headerTitle && title">
+        {{ title }}
+      </BasicTitle>
+      <div
+        class="flex items-center flex-1 cursor-pointer justify-self-stretch"
+        v-if="search || toolbar"
+      >
+        <div :class="getInputSearchCls" v-if="search">
+          <InputSearch
+            :placeholder="t('common.searchText')"
+            size="small"
+            allowClear
+            v-model:value="searchValue"
+          />
+        </div>
+        <Dropdown @click.prevent v-if="toolbar">
+          <Icon icon="ion:ellipsis-vertical" />
+          <template #overlay>
+            <Menu @click="handleMenuClick">
+              <template v-for="item in toolbarList" :key="item.value">
+                <MenuItem v-bind="{ key: item.value }">
+                  {{ item.label }}
+                </MenuItem>
+                <MenuDivider v-if="item.divider" />
+              </template>
+            </Menu>
+          </template>
+        </Dropdown>
       </div>
-      <Dropdown @click.prevent v-if="toolbar">
-        <Icon icon="ion:ellipsis-vertical" />
-        <template #overlay>
-          <Menu @click="handleMenuClick">
-            <template v-for="item in toolbarList" :key="item.value">
-              <MenuItem v-bind="{ key: item.value }">
-                {{ item.label }}
-              </MenuItem>
-              <MenuDivider v-if="item.divider" />
-            </template>
-          </Menu>
-        </template>
-      </Dropdown>
+    </div>
+    <!-- 自定义选项 -->
+    <div v-if="props.enableCustomTool" :class="bem()" class="flex flex-row gap-2 px-4 py-1.5">
+      <span> 节点状态: </span>
+      <span :class="checkStrictly ? 'text-red-500' : 'text-blue-500'">{{ checkStrictlyText }}</span>
+    </div>
+    <div
+      v-if="props.enableCustomTool"
+      :class="bem()"
+      class="flex flex-row gap-1 px-3 py-1.5 justify-between"
+    >
+      <Checkbox v-model:checked="radioGroup.collapseAll" @change="handleCollapseAll"
+        >展开/折叠</Checkbox
+      >
+      <Checkbox v-model:checked="radioGroup.checkAll" @change="handleCheckAll"
+        >全选/全不选</Checkbox
+      >
+      <Checkbox :checked="!props.checkStrictly" @change="handleCheckStrictly"
+        >父子节点关联</Checkbox
+      >
     </div>
   </div>
 </template>
 <script lang="ts" setup>
-  import { type PropType, computed, ref, watch, useSlots } from 'vue';
+  import { type PropType, computed, ref, watch, useSlots, reactive } from 'vue';
   import {
     Dropdown,
     Menu,
     MenuItem,
     MenuDivider,
     InputSearch,
+    Checkbox,
     type MenuProps,
   } from 'ant-design-vue';
   import Icon from '@/components/Icon/Icon.vue';
@@ -86,6 +109,18 @@
       type: Function,
       default: undefined,
     },
+    checkStrictly: {
+      type: Boolean,
+      default: false,
+    },
+    /**
+     * 是否启用自定义工具
+     * 选择全部 / 节点关联独立 ...
+     */
+    enableCustomTool: {
+      type: Boolean,
+      default: false,
+    },
   } as const);
   const emit = defineEmits(['strictly-change', 'search']);
 
@@ -128,6 +163,29 @@
         ]
       : defaultToolbarList;
   });
+
+  const checkStrictlyText = computed(() => {
+    return props.checkStrictly ? '节点独立' : '节点关联';
+  });
+
+  const radioGroup = reactive({
+    checkAll: false,
+    collapseAll: false,
+  });
+
+  function handleCollapseAll() {
+    props.expandAll?.(radioGroup.collapseAll);
+  }
+
+  function handleCheckAll() {
+    props.checkAll?.(radioGroup.checkAll);
+  }
+  /**
+   * 节点独立/关联
+   */
+  function handleCheckStrictly() {
+    emit('strictly-change', !props.checkStrictly);
+  }
 
   const handleMenuClick: MenuProps['onClick'] = ({ key }) => {
     switch (key) {

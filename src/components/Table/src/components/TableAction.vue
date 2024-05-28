@@ -24,8 +24,16 @@
       v-if="dropDownActions && getDropdownList.length > 0"
     >
       <slot name="more"></slot>
-      <a-button type="link" size="small" v-if="!$slots.more">
+      <a-button type="link" size="small" v-if="!$slots.more && !dropDownBtnDisplay">
         <MoreOutlined class="icon-more" />
+      </a-button>
+      <a-button
+        type="link"
+        v-if="!$slots.more && dropDownBtnDisplay"
+        v-bind="dropDownBtnProps || {}"
+        size="small"
+      >
+        更多
       </a-button>
     </Dropdown>
   </div>
@@ -36,7 +44,7 @@
   import { Divider, Tooltip, TooltipProps } from 'ant-design-vue';
   import Icon from '@/components/Icon/Icon.vue';
   import { ActionItem, TableActionType } from '@/components/Table';
-  import { PopConfirmButton } from '@/components/Button';
+  import { PopConfirmButton, ButtonProps } from '@/components/Button';
   import { Dropdown } from '@/components/Dropdown';
   import { useDesign } from '@/hooks/web/useDesign';
   import { useTableContext } from '../hooks/useTableContext';
@@ -60,6 +68,13 @@
     divider: propTypes.bool.def(true),
     outside: propTypes.bool,
     stopButtonPropagation: propTypes.bool.def(false),
+    // 以按钮形式显示dropDown按钮
+    dropDownBtnDisplay: propTypes.bool.def(false),
+    // dropDown按钮的props
+    dropDownBtnProps: {
+      type: Object as PropType<ButtonProps>,
+      default: () => ({}),
+    },
   });
 
   const { prefixCls } = useDesign('basic-table-action');

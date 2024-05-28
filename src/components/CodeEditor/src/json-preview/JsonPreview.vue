@@ -10,3 +10,11 @@
     data: Object,
   });
 </script>
+
+<style lang="less">
+  html[data-theme='dark'] {
+    .vjs-tree-node:hover {
+      background-color: #333;
+    }
+  }
+</style>

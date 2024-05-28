@@ -3,6 +3,8 @@ import { defHttp } from '@/utils/http/axios';
 import { ErrorMessageMode } from '#/axios';
 import { CaptchaResult, LoginParam, LoginResult, UserMenu } from '@/api/sys/model/login';
 import { UserInfo } from '#/store';
+import { PageParam, PageResult } from '#/base';
+import { SysUser } from '#/sys/user';
 
 enum Api {
   Login = '/login',
@@ -59,6 +61,10 @@ export function getUserInfo() {
 
 export function getPermCode() {
   return defHttp.get<string[]>({ url: Api.GetPermCode });
+}
+
+export function pageUserApi(params: PageParam<SysUser>) {
+  return defHttp.post<PageResult<SysUser>>({ url: Api.Page, params });
 }
 
 export function doLogout() {

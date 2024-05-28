@@ -20,6 +20,7 @@ export interface ReturnInnerMethods extends DrawerInstance {
   changeLoading: (loading: boolean) => void;
   changeOkLoading: (loading: boolean) => void;
   getOpen?: ComputedRef<boolean>;
+  drawerLoading: (loading: boolean) => void;
 }
 
 export type UseDrawerReturnType = [RegisterFn, ReturnMethods];

@@ -17,6 +17,7 @@
     </template>
 
     <ScrollContainer
+      ref="scrollRef"
       :style="getScrollContentStyle"
       v-loading="getLoading"
       :loading-tip="loadingText || t('common.loadingText')"
@@ -130,6 +131,7 @@
     { deep: true },
   );
 
+  const scrollRef = ref<InstanceType<typeof ScrollContainer>>();
   watch(
     () => openRef.value,
     (open) => {
@@ -137,6 +139,10 @@
         emit('open-change', open);
         if (instance && drawerInstance.emitOpen) {
           drawerInstance.emitOpen(open, instance.uid);
+        }
+        if (open) {
+          // 打开时滚动到顶部
+          scrollRef.value?.scrollTo(0);
         }
       });
     },

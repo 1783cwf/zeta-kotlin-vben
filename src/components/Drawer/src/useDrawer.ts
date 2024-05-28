@@ -149,6 +149,10 @@ export const useDrawerInner = (callbackFn?: Fn): UseDrawerInnerReturnType => {
         return openData[~~unref(uidRef)];
       }),
 
+      drawerLoading: (loading = true) => {
+        getInstance()?.setDrawerProps({ loading, confirmLoading: loading });
+      },
+
       closeDrawer: () => {
         getInstance()?.setDrawerProps({ open: false });
       },

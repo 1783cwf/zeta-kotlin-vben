@@ -13,6 +13,7 @@ export enum ToolbarEnum {
 }
 
 export const treeEmits = [
+  'update:checkStrictly',
   'update:expandedKeys',
   'update:selectedKeys',
   'update:value',
@@ -60,6 +61,14 @@ export const treeProps = buildProps({
   },
   toolbar: Boolean,
   search: Boolean,
+  /**
+   * 是否启用自定义工具
+   * 选择全部 / 节点关联独立 ...
+   */
+  enableCustomTool: {
+    type: Boolean,
+    default: false,
+  },
   searchValue: {
     type: String,
     default: '',
@@ -91,7 +100,6 @@ export const treeProps = buildProps({
 
   expandedKeys: {
     type: Array as PropType<KeyType[]>,
-    default: () => [],
   },
 
   selectedKeys: {

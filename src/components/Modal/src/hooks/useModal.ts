@@ -158,6 +158,11 @@ export const useModalInner = (callbackFn?: Fn): UseModalInnerReturnType => {
         const callRedo = getInstance()?.redoModalHeight;
         callRedo && callRedo();
       },
+
+      modalLoading(status: boolean) {
+        getInstance()?.setModalProps({ loading: status, loadingTip: '加载中...' });
+        getInstance()?.setModalProps({ confirmLoading: status });
+      },
     },
   ];
 };

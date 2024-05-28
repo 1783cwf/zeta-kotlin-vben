@@ -2,12 +2,13 @@ import type { BasicTableProps, TableActionType, FetchParams, BasicColumn } from 
 import type { PaginationProps } from '../types/pagination';
 import type { DynamicProps } from '#/utils';
 import type { FormActionType } from '@/components/Form';
-import type { WatchStopHandle } from 'vue';
+import type { WatchStopHandle, ComputedRef } from 'vue';
 import { getDynamicProps } from '@/utils';
-import { ref, onUnmounted, unref, watch, toRaw } from 'vue';
+import { ref, onUnmounted, unref, watch, toRaw, computed } from 'vue';
 import { isProdMode } from '@/utils/env';
 import { error } from '@/utils/log';
 import type { Key } from 'ant-design-vue/lib/table/interface';
+import { useMessage } from '@/hooks/web/useMessage';
 
 type Props = Partial<DynamicProps<BasicTableProps>>;
 
@@ -19,6 +20,8 @@ export function useTable(tableProps?: Props): [
   (instance: TableActionType, formInstance: UseTableMethod) => void,
   TableActionType & {
     getForm: () => FormActionType;
+    selected: ComputedRef<boolean>;
+    multipleRemove: (api: (...data: any) => Promise<any>) => Promise<void>;
   },
 ] {
   const tableRef = ref<Nullable<TableActionType>>(null);
@@ -65,8 +68,12 @@ export function useTable(tableProps?: Props): [
     return table as TableActionType;
   }
 
+  const { createConfirm } = useMessage();
+
   const methods: TableActionType & {
     getForm: () => FormActionType;
+    selected: ComputedRef<boolean>;
+    multipleRemove: (api: (...data: any) => Promise<any>) => Promise<void>;
   } = {
     reload: async (opt?: FetchParams) => {
       return await getTableInstance().reload(opt);
@@ -110,6 +117,28 @@ export function useTable(tableProps?: Props): [
     },
     getSelectRowKeys: () => {
       return toRaw(getTableInstance().getSelectRowKeys());
+    },
+    selected: computed<boolean>(() => {
+      return getTableInstance().getSelectRowKeys().length > 0;
+    }),
+    // 多选删除
+    multipleRemove: async (api: (...data: any) => Promise<any>) => {
+      const instance = getTableInstance();
+      const selectedRowKeys = instance.getSelectRowKeys();
+      createConfirm({
+        title: '提示',
+        content: `是否删除这${selectedRowKeys.length}条数据?`,
+        iconType: 'warning',
+        okButtonProps: {
+          danger: true,
+        },
+        onOk: async () => {
+          console.log(selectedRowKeys);
+          await api(selectedRowKeys);
+          instance.clearSelectedRowKeys();
+          await instance.reload();
+        },
+      });
     },
     getSelectRows: () => {
       return toRaw(getTableInstance().getSelectRows());

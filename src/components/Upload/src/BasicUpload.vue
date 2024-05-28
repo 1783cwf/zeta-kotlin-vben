@@ -1,15 +1,10 @@
 <template>
   <div>
     <Space>
-      <a-button
-        type="primary"
-        @click="openUploadModal"
-        preIcon="carbon:cloud-upload"
-        :disabled="disabled"
-      >
-        {{ t('component.upload.upload') }}
+      <a-button type="primary" @click="openUploadModal">
+        {{ props.btnText }}
       </a-button>
-      <Tooltip placement="bottom" v-if="showPreview">
+      <Tooltip placement="bottom" v-if="preview">
         <template #title>
           {{ t('component.upload.uploaded') }}
           <template v-if="fileList.length">
@@ -36,12 +31,9 @@
 
     <UploadPreviewModal
       :value="fileList"
-      :max-number="bindValue.maxNumber"
       @register="registerPreviewModal"
       @list-change="handlePreviewChange"
       @delete="handlePreviewDelete"
-      :preview-columns="props.previewColumns"
-      :before-preview-data="props.beforePreviewData"
     />
   </div>
 </template>
@@ -74,11 +66,11 @@
 
   const fileList = ref<string[]>([]);
 
-  const showPreview = computed(() => {
-    const { emptyHidePreview } = props;
-    if (!emptyHidePreview) return true;
-    return emptyHidePreview ? fileList.value.length > 0 : true;
-  });
+  // const showPreview = computed(() => {
+  //   const { emptyHidePreview } = props;
+  //   if (!emptyHidePreview) return true;
+  //   return emptyHidePreview ? fileList.value.length > 0 : true;
+  // });
 
   const bindValue = computed(() => {
     const value = { ...attrs, ...props };

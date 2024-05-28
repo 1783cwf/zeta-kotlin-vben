@@ -3,6 +3,8 @@ import type { BasicTableProps, FetchParams } from '../types/table';
 import { unref, computed } from 'vue';
 import type { FormProps } from '@/components/Form';
 import { isFunction } from '@/utils/is';
+// 默认样式
+import { DEFAULT_FORM_CONFIG } from '@/components/Table/src/const';
 
 export function useTableForm(
   propsRef: ComputedRef<BasicTableProps>,
@@ -12,10 +14,12 @@ export function useTableForm(
 ) {
   const getFormProps = computed((): Partial<FormProps> => {
     const { formConfig } = unref(propsRef);
-    const { submitButtonOptions } = formConfig || {};
+    // 覆盖默认样式
+    const currentFormConfig = Object.assign({}, DEFAULT_FORM_CONFIG, formConfig);
+    const { submitButtonOptions } = currentFormConfig || {};
     return {
       showAdvancedButton: true,
-      ...formConfig,
+      ...currentFormConfig,
       submitButtonOptions: { loading: unref(getLoading), ...submitButtonOptions },
       compact: true,
     };

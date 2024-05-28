@@ -32,13 +32,9 @@
           <HeaderCell :column="column" />
         </slot>
       </template>
-      <!-- 增加对antdv3.x兼容 -->
       <template #bodyCell="data">
         <slot name="bodyCell" v-bind="data || {}"></slot>
       </template>
-      <!--      <template #[`header-${column.dataIndex}`] v-for="(column, index) in columns" :key="index">-->
-      <!--        <HeaderCell :column="column" />-->
-      <!--      </template>-->
     </Table>
   </div>
 </template>
@@ -357,7 +353,7 @@
         width: 100%;
         margin-bottom: 16px;
         padding: 12px 10px 6px;
-        border-radius: 2px;
+        border-radius: 8px;
         background-color: @component-background;
       }
     }
@@ -370,7 +366,7 @@
 
     .ant-table-wrapper {
       padding: 6px;
-      border-radius: 2px;
+      border-radius: 8px;
       background-color: @component-background;
 
       .ant-table-title {
@@ -378,8 +374,15 @@
         padding: 0 0 8px !important;
       }
 
-      .ant-table.ant-table-bordered .ant-table-title {
-        border: none !important;
+      .ant-table.ant-table-bordered {
+        .ant-table-title {
+          border: none !important;
+        }
+
+        /** 修复在开启bordered情况下 有一条竖线 */
+        .ant-table-container {
+          border-inline-start: 0;
+        }
       }
     }
 
