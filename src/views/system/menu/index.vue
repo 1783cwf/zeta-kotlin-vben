@@ -2,18 +2,29 @@
   <div>
     <BasicTable @register="registerTable" @fetch-success="onFetchSuccess">
       <template #toolbar>
-        <a-button type="primary" @click="handleCreate"> 新增菜单 </a-button>
+        <a-button type="primary" @click="handleCreate"> 新增菜单</a-button>
       </template>
       <template #bodyCell="{ column, record }">
         <template v-if="column?.key === 'action'">
           <TableAction
             :actions="[
               {
+                label: '新增',
+                icon: IconEnum.ADD,
+                type: 'primary',
+                ghost: true,
+                onClick: handleEdit.bind(null, record!!),
+              },
+              {
+                label: '修改',
+                type: 'primary',
                 icon: IconEnum.EDIT,
                 onClick: handleEdit.bind(null, record!!),
               },
               {
+                label: '删除',
                 icon: IconEnum.DELETE,
+                type: 'primary',
                 color: 'error',
                 popConfirm: {
                   title: '是否确认删除',
@@ -57,7 +68,7 @@
     showIndexColumn: false,
     canResize: false,
     actionColumn: {
-      width: 80,
+      width: 240,
       title: '操作',
       dataIndex: 'action',
       // slots: { customRender: 'action' },
@@ -65,16 +76,18 @@
     },
   });
 
-  function handleCreate() {
+  function handleCreate(record?: Recordable) {
+    const parentId = record?.id || '0';
     openDrawer(true, {
-      isUpdate: false,
+      update: false,
+      record: { parentId },
     });
   }
 
   function handleEdit(record: Recordable) {
     openDrawer(true, {
       record,
-      isUpdate: true,
+      update: true,
     });
   }
 

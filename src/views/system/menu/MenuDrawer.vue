@@ -35,13 +35,28 @@
   const [registerDrawer, { setDrawerProps, closeDrawer }] = useDrawerInner(async (data) => {
     await resetFields();
     setDrawerProps({ confirmLoading: false });
-    isUpdate.value = !!data?.isUpdate;
+
+    const { record, update } = data;
+    isUpdate.value = update.value;
+    if (record) {
+      // 如果菜单ID有值，就设置菜单ID为父ID。如果菜单ID没有值，说明添加的是一级菜单
+      await setFieldsValue({ parentId: record.id || record.parentId });
+    }
     if (unref(isUpdate)) {
+      console.log(record);
       await setFieldsValue({
         ...data.record,
       });
     }
-    const treeData = await getMenuList();
+
+    // 在最外面包一层根目录
+    const treeData = [
+      {
+        id: '0',
+        label: '根菜单',
+        children: await getMenuList(),
+      },
+    ];
     await updateSchema([
       {
         field: 'parentId',
@@ -52,6 +67,10 @@
             key: 'id',
             value: 'id',
           },
+          treeLine: { showLeafIcon: false },
+          // 默认展开的树节点
+          treeDefaultExpandedKeys: [0],
+          treeDefaultExpandAll: false,
         },
         dynamicDisabled: () => {
           return isUpdate.value;
@@ -81,7 +100,6 @@
       {
         field: 'openType',
         dynamicDisabled: ({ values }) => {
-          console.log(values);
           return values.menuType === 'RESOURCE' || isUpdate.value;
         },
       },
