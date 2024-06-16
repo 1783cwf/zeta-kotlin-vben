@@ -13,7 +13,7 @@
                 icon: IconEnum.ADD,
                 type: 'primary',
                 ghost: true,
-                onClick: handleEdit.bind(null, record!!),
+                onClick: handleCreate.bind(null, record!!),
               },
               {
                 label: '修改',

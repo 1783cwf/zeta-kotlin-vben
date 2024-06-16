@@ -131,8 +131,8 @@ export const formSchema: FormSchema[] = [
     field: 'name',
     label: '路由名称',
     component: 'Input',
-    required(renderCallbackParams) {
-      return renderCallbackParams.values.menuType === 'MENU';
+    required({ values }) {
+      return values.menuType === 'MENU';
     },
     helpMessage: 'Vue Router的路由标识，需要唯一值。建议用英文命名',
     dynamicDisabled: ({ values }): boolean => {

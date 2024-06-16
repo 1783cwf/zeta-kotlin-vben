@@ -1,3 +1,6 @@
+export type ID = string | number;
+export type IDS = (string | number)[];
+
 /**
  * 通用返回结果
  */

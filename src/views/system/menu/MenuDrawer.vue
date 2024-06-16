@@ -16,7 +16,7 @@
   import { formSchema } from './menu.data';
   import { BasicDrawer, useDrawerInner } from '@/components/Drawer';
 
-  import { getMenuList, addMenu, updateMenu } from '@/api/sys/menu';
+  import { getMenuList, addMenu, updateMenu, menuInfo } from '@/api/sys/menu';
   import { SysMenuSaveParam } from '#/sys/menu';
 
   defineOptions({ name: 'MenuDrawer' });
@@ -38,17 +38,16 @@
 
     const { record, update } = data;
     isUpdate.value = update.value;
-    if (record) {
+
+    if (record && record.parentId) {
       // 如果菜单ID有值，就设置菜单ID为父ID。如果菜单ID没有值，说明添加的是一级菜单
-      await setFieldsValue({ parentId: record.id || record.parentId });
-    }
-    if (unref(isUpdate)) {
-      console.log(record);
-      await setFieldsValue({
-        ...data.record,
-      });
+      await setFieldsValue({ parentId: record.parentId });
     }
 
+    if (update && record) {
+      const ret = await menuInfo(record.id);
+      await setFieldsValue(ret);
+    }
     // 在最外面包一层根目录
     const treeData = [
       {
@@ -73,13 +72,13 @@
           treeDefaultExpandAll: false,
         },
         dynamicDisabled: () => {
-          return isUpdate.value;
+          return unref(isUpdate);
         },
       },
       {
         field: 'menuType',
         dynamicDisabled: () => {
-          return isUpdate.value;
+          return unref(isUpdate);
         },
         componentProps: {
           onChange: (value: string) => {
@@ -100,7 +99,7 @@
       {
         field: 'openType',
         dynamicDisabled: ({ values }) => {
-          return values.menuType === 'RESOURCE' || isUpdate.value;
+          return values.menuType === 'RESOURCE' || unref(isUpdate);
         },
       },
       {
@@ -119,7 +118,7 @@
       const values: SysMenuSaveParam = await validate();
       setDrawerProps({ confirmLoading: true });
 
-      isUpdate.value ? await updateMenu(values) : await addMenu(values);
+      unref(isUpdate) ? await updateMenu(values) : await addMenu(values);
 
       closeDrawer();
       emit('success');

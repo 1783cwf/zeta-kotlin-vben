@@ -1,5 +1,6 @@
 import { defHttp } from '@/utils/http/axios';
 import { SysMenu, SysMenuSaveParam } from '#/sys/menu';
+import { ID } from '#/base';
 
 enum Api {
   GetMenuList = '/system/menu/tree',
@@ -27,6 +28,10 @@ export const addMenu = (param: SysMenuSaveParam) => {
     },
   );
 };
+
+export function menuInfo(menuId: ID) {
+  return defHttp.get<SysMenu>({ url: Api.Common + '/' + menuId });
+}
 
 export const updateMenu = (param: SysMenuSaveParam) => {
   return defHttp.put<boolean>({ url: Api.Common, params: param });
